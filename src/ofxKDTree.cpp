@@ -43,12 +43,24 @@ void ofxKDTree::constructKDTree() {
 }
 
 void ofxKDTree::getKNN(vector<double> query_pt, int k, vector<size_t> & indexes, vector<double> & dists) {
+    std::vector<double> dim_weights(dim, 1.);
+    mat_index->index->distance.set_weights(dim_weights);
     indexes.resize(k);
     dists.resize(k);
     nanoflann::KNNResultSet<double> resultSet(k);
     resultSet.init(&indexes[0], &dists[0] );
     mat_index->index->findNeighbors(resultSet, &query_pt[0], nanoflann::SearchParams(10));
 }
+
+void ofxKDTree::getWeightedKNN(vector<double> query_pt, int k, vector<size_t> & indexes, vector<double> & dists, vector<double> weights) {
+    mat_index->index->distance.set_weights(weights);
+    indexes.resize(k);
+    dists.resize(k);
+    nanoflann::KNNResultSet<double> resultSet(k);
+    resultSet.init(&indexes[0], &dists[0] );
+    mat_index->index->findNeighbors(resultSet, &query_pt[0], nanoflann::SearchParams(10));
+}
+
 
 void ofxKDTree::save(string filename) {
     const char * path = filename.c_str();

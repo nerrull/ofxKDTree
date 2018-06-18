@@ -6,7 +6,7 @@
 using namespace nanoflann;
 
 
-template <class VectorOfVectorsType, typename num_t = double, int DIM = -1, class Distance = nanoflann::metric_L2, typename IndexType = size_t>
+template <class VectorOfVectorsType, typename num_t = double, int DIM = -1, class Distance = nanoflann::metric_L2_Weighted, typename IndexType = size_t>
 struct KDTreeVectorOfVectorsAdaptor
 {
     typedef KDTreeVectorOfVectorsAdaptor<VectorOfVectorsType,num_t,DIM,Distance> self_t;
@@ -102,7 +102,8 @@ public:
     void constructKDTree();
     
     void getKNN(vector<double> query_pt, int k, vector<size_t> & indexes, vector<double> & dists);
-    
+    void getWeightedKNN(vector<double> query_pt, int k, vector<size_t> & indexes, vector<double> & dists, vector<double> weights);
+
     void save(string filename);
     void load(string filename);
     
